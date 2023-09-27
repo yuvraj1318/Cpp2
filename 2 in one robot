@@ -1,0 +1,118 @@
+//ARDUINO 2WD LINE FOLLOWER ROBOT
+//CREATED BY DIY BUILDER
+//DATE 06-11-2020
+//VERSION 1.0
+
+
+
+#include<AFMotor.h> 
+#define leftSensor A0 
+#define rightSensor A1 
+#define button A2  
+
+int button_State = 0;  
+
+AF_DCMotor motor1(3); 
+AF_DCMotor motor2(4); 
+
+
+
+void setup() {
+
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+pinMode(leftSensor, INPUT);
+pinMode(rightSensor, INPUT);
+pinMode(button, INPUT_PULLUP); 
+
+}
+
+void loop() {
+  
+  
+  // put your main code here, to run repeatedly:
+int leftValue = digitalRead(leftSensor); 
+int rightValue = digitalRead(rightSensor); 
+
+int button_State = digitalRead(button);
+
+
+Serial.print("leftValue");
+Serial.println(leftValue);
+Serial.print("rightValue");
+Serial.println(rightValue);
+Serial.print("button");
+Serial.println(button_State);
+
+if(button_State == HIGH) {
+  White_Line(); 
+}else if (button_State == LOW) {
+  Black_Line();
+}
+}
+
+void White_Line() {
+  int leftValue = digitalRead(leftSensor); 
+  int rightValue = digitalRead(rightSensor); 
+  if((leftValue == 1) && (rightValue == 1)) {
+  // MOVE FORWARD
+  motor1.setSpeed(120);
+  motor1.run(FORWARD);
+  motor2.setSpeed(120);
+  motor2.run(FORWARD);
+}
+else if ((leftValue == 1) && (rightValue == 0)) {
+  //MOVE RIGHT
+  motor1.setSpeed(100);
+  motor1.run(FORWARD);
+  motor2.setSpeed(100);
+  motor2.run(BACKWARD);
+  }
+else if ((leftValue == 0) && (rightValue == 1)) {
+  //MOVE LEFT
+  motor1.setSpeed(100);
+  motor1.run(BACKWARD);
+  motor2.setSpeed(100);
+  motor2.run(FORWARD);
+}
+else if ((leftValue == 0) && (rightValue == 0)) {
+  //STOP
+  motor1.setSpeed(0);
+  motor1.run(RELEASE);
+  motor2.setSpeed(0);
+  motor2.run(RELEASE);
+}
+}
+
+void Black_Line() {
+  int leftValue = digitalRead(leftSensor); 
+  int rightValue = digitalRead(rightSensor);
+  if((leftValue == 0) && (rightValue == 0)) {
+  // MOVE FORWARD
+  motor1.setSpeed(120);
+  motor1.run(FORWARD);
+  motor2.setSpeed(120);
+  motor2.run(FORWARD);
+}
+else if ((leftValue == 0) && (rightValue == 1)) {
+  //MOVE RIGHT
+  motor1.setSpeed(100);
+  motor1.run(FORWARD);
+  motor2.setSpeed(100);
+  motor2.run(BACKWARD);
+  }
+else if ((leftValue == 1) && (rightValue == 0)) {
+  //MOVE LEFT
+  motor1.setSpeed(100);
+  motor1.run(BACKWARD);
+  motor2.setSpeed(100);
+  motor2.run(FORWARD);
+}
+else if ((leftValue == 1) && (rightValue == 1)) {
+  //STOP
+  motor1.setSpeed(0);
+  motor1.run(RELEASE);
+  motor2.setSpeed(0);
+  motor2.run(RELEASE);
+}
+}
